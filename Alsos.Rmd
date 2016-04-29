@@ -1,0 +1,70 @@
+---
+title: "Alsos: Results"
+author: "Huub Hoofs"
+date: "29 April 2016"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r options, include=FALSE}
+setwd("L:\\FHML_EPID\\OE_jeugd\\Alsos")
+# # 
+library(foreign)
+library(MplusAutomation)
+library(stringr)
+library(ggplot2)
+library(car)
+```
+
+```{r data, include=FALSE}
+Data <- read.spss("DataFiles\\Data29042016.sav",to.data.frame = TRUE)
+head(Data)
+names(Data) <- c("ID","Gender","BD","LangT2","EducT2","AgeT2","AgeT5",
+                 "Note1",
+                 "SoundT2","VocT2","RepT2","SyntaxT2",
+                 "Note2",
+                 "AttenT2","MemoT2","WorkT2",
+                 "Note3",
+                 "AllitT5","LetT5","NumberT5","LiDAT5","LiCAT5","LiDRT5","LiCRT5")
+DataMP <- Data[ , !str_detect(names(Data),"Note")]
+head(DataMP)
+
+selvar_litT2 <- c("SoundT2","VocT2","RepT2","SyntaxT2")
+selvar_EFT2  <- c("AttenT2","MemoT2","WorkT2")
+selvar_litT5 <- c("AllitT5","LetT5")
+selvar_numT5 <- c("NumberT5","LiDAT5","LiCAT5","LiDRT5","LiCRT5")
+
+
+scatterplotMatrix(DataMP[, c(selvar_litT2,selvar_EFT2,selvar_litT5,selvar_numT5)], diagonal="histogram", smoother=FALSE)
+scatterplotMatrix(DataMP[, c(selvar_litT2)], diagonal="histogram", smoother=FALSE)
+scatterplotMatrix(DataMP[, c(selvar_numT5)], diagonal="histogram", smoother=FALSE)
+```
+
+```{r mplus prep, include=FALSE}
+prepareMplusData(df = DataMP, filename = "DataFiles\\MplusData.dat")
+```
+
+```{r mplus summary, include=FALSE}
+
+```
+
+## Results
+
+# Descriptives
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
